@@ -1,0 +1,189 @@
+首先shell的大小写敏感
+
+shell的变量默认是字符串
+
+变量的定义：
+	shell里面有三种引号。'',"",``.
+	单引号：将内容都作为普通字符
+	双引号：只解析 $ , \ , ' , "
+	反引号：将内容作为shell指令
+
+变量的作用域：
+	函数是可以访问到全局的
+	声明为局部变量：lcoal
+坑点：
+	$代表取变量的值，定义和赋值的时候不需要使用。
+	建议写成 “${}” 这样的格式。
+系统变量：
+	$n 解释为参数，文件名为 $0 
+	$# 命令行参数的个数
+	$? 上一个状态码
+	$* 返回所有参数，视为一整个字符串
+	$@ 返回所有参数，将每个参数分别用字符串表示
+	$$ 返回进程ID
+\在shell也是转义
+
+环境变量：
+	PATH
+	HOME
+	COLUMNS
+	HISTFILE
+	HISTSIZE
+	IFS
+	LOGNAME
+	SHELL
+	TERM
+	TMOUT
+	PWD
+还可以用set | more 展示所有环境变量
+
+变量赋值：
+	viaoshi_name=value
+	注：等号前后不能有空格
+清除变量：
+	unset variable_name
+
+反引号：
+	`shell_command`
+	$(shell_command)
+	上述两者等价
+
+
+条件测试和判断语句：
+	test 和 [
+	
+用法：
+	test expression  or [ expression ]
+坑点:   [ 作为命令，记住要与表达式有空格
+
+字符串运算符：
+	string 判断是否为空
+	string1 = string2 判断是否相等
+	string1 != string2 判断是否不相等
+	-n string 判断是否非空串
+	-z string 判断是否空串 注：与第一条看似相同，但两者不一样，建议用这条！
+坑点：“=”，“!=”，“-z”等这些符号左右两边一定要有空格
+
+整数运算符：
+	test number1 op number2
+	-eq =
+	-ne !=
+	-gt >
+	-lt <
+	-ge >=
+	-le <=
+
+文件测试：
+	test op file
+	-a 判断存在 注：这玩意和逻辑运算符的&&是一样的
+	-e 满足上述的情况而使用，与 “-a” 一样
+	-b 块文件
+	-c 字符文件
+	-d 目录
+	-s 非空文件
+	-f 存在的常规文件
+	-w 可写
+	-L 存在的符号链接
+	-u 设置suid位
+	-r 可读
+	-x 可执行
+
+逻辑运算符：
+	! 
+	-a &&
+	-o ||
+
+if语句：
+if expression
+then
+	statement1
+	...
+fi
+
+或者
+if expression; then
+	statement
+	...
+fi
+
+空命令：“:”,不做任何事，退出状态永远是0
+
+类似scanf，shell有 read 用于读取键盘输入
+shell是动态语言，类型之间可以发生隐式转换
+
+有if elif 进行多条件判断
+
+退出程序：
+	exit status
+
+多条件判断语句：
+case variable in
+value1)	//右边的圆括号
+	statement
+	...
+	;; //类似break
+value2)
+	statement
+	...
+	;;
+...
+*) //default
+	statement
+	...
+	;;
+esac //case倒过来写，代表结束
+
+算术运算符：
+	和py的基本相同，有 ** 但没有 //
+	`expr expression`
+	$((...))
+	$[...] 同上
+	let 
+坑点：
+	运算符两边一定要有空格！！！
+	expr不能进行幂运算，而且里面的 “()”，“*”，都要转义处理，注意反引号！！！
+拥有和C一样的位运算符，复合运算符，自增自减运算符！
+常量进制：
+	eg：20 ， 020 ， 0x20
+	又或者
+	eg：x=2#10000 , x=8#123 , x=16#32...类似这种写法
+
+循环结构：
+for循环：
+	for variable in {list}
+	do
+		...
+	done
+或者
+	for variable in {start..end..step}
+	do
+		...
+	done
+还有很多灵活的用法，比如：for var in $(ls)之类
+或者
+	for var
+	do
+		...
+	done
+	像这种默认列表为参数
+或者c风格的for循环语句
+	for((i=1;i<10;i++))
+	do	
+		...
+	done
+for循环处理数组，等我学完数组再来补充
+
+until循环语句：
+	until expression
+	do
+		...
+	done
+坑点：上面的条件不是循环条件，而是退出条件
+	
+while循环语句：
+	while expression
+	do
+		...
+	done
+还有break和continue控制，基本和C一样，但是后边可以加参数，表示跳出的循环数
+eg：break 2 或者 continue 2 
