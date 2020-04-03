@@ -232,7 +232,70 @@ eg：break 2 或者 continue 2
 	//bash里面没有提供浮点数计算
 	
 	浮点数解决方案:
-
+	bc:
+	在脚本中使用bc:
+	var=$(echo "options; expression" | bc)//适合短数据的运算
 	
+	//使用内联输入重定向
+	var=$(bc << EOF
+	options
+	statements
+	expressions
+	EOF
+	)
+	eg:
+		var5=$(bc << EOF
+		scale=4
+		a1 = ($var1*$var2)//a1不能在接下来的shell里面调用到,只能在计算器使用
+		a2 = ($var2 * $var4)//计算器里面没有太多关于空格的要求
 
+退出脚本:
+	查看退出状态
+	$?
+		0 
+		1  一般未知错误
+		2  不适合的命令
+		126  命令不可执行
+		127  没有找到命令
+		128 无效的退出参数
+		128+x 与信号x相关的重要错误
+		130 ctrl+c终止的命令
+		255 正常范围之外的退出状态码
+	
+	exit://允许自定义退出码
+		退出码只能在0~255	
+		
+//////////////////////////////////////////////////////////////////////////////////
+结构化命令
+if-then
+	格式:
+		if command
+		then
+			command
+		fi
+		//if接命令,如果命令的返回码是0,则then部分会被执行
+		if command ;then
+			command 
+		fi
+		//也可以写成这个样子
 
+if-then-else
+	格式:
+	if command
+	then
+		command
+	else
+		command
+	fi
+
+if-elif-then
+	if command
+	then
+		command
+	elif command
+	then 
+		command
+	else
+		command
+	fi
+	//在elif语句中,紧跟着的else属于elif,不属于之前的if-then
