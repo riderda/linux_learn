@@ -144,3 +144,24 @@
 	在.bashrc文件中定义函数
 	使用 source 加载脚本 或者直接在里面创建函数
 	//主目录下的.bashrc是每次启动shell都会自动加载的一个脚本
+////////////////////////////////////////////////////////////////
+
+
+创建脚本菜单
+	//这个有点多
+	select命令
+		ps3="" //这个是循环每次输入的提示
+		select variable in list
+		do
+			commands
+		done
+		//类似循环,每一次都会要求输入variable
+		//自动生成list的内容列表
+	
+	制作窗口
+		dialog包
+		格式: dialog --widget parameters
+		注意: 使用STDERR , 使用退出码
+
+
+	
