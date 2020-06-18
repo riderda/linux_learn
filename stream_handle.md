@@ -124,3 +124,76 @@ $ cat script3.gawk
 $ gawk -F: -f script.gawk /etc/passwd
 [...]
 ```
+***
+**在处理数据前运行脚本**<br />
+gawk允许指定程序脚本何时运行,默认情况下gawk从输入读取一行文本,然后针对该行的数据执行脚本.有时候可能需要在处理数据前运行脚本,这就需要 ***BEGIN*** 关键字.
+```shell
+$ gawk 'BEGIN {print "hello world"}'
+hello world
+$
+```
+*就是说这次print命令会在读取前显示文本.但在它显示了文本之后,就会快速退出,不等待任何数据*<br />
+```shell
+$ cat data.txt
+line 1
+line 2
+line 3
+$
+$ gawk 'BEGIN {print "the data file contents:"}
+> {print $0}' data.txt
+the data file contents:
+line 1
+line 2
+line 3
+$
+```
+**要注意gawk执行完BEGIN后会用第二段脚本处理数据({print $0}),要小心.两段脚本在gawk里还是一个文本字符串,所以需要单引号包起来**
+***
+**在处理数据后运行脚本**<br />
+与 ***BEGIN*** 类似 , ***END*** 允许指定一个程序脚本,gawk会在读完数据后执行它
+```shell
+$ gawk 'BEGIN {print "the data file contents:"}
+> {print $0}
+> END {print "enf of file"}' data.txt
+the data file contents:
+line 1
+line 2
+line 3
+end of file
+$
+```
+这个功能一般可以来处理一个页脚(瞎猜的)
+<br />
+eg
+```shell
+$ cat script.gawk
+BEGIN {
+print "the latest list of users and shells"
+print " UserID \t Shell"
+print "-------- \t -------"
+FS=":"
+}
+
+{
+print $1 "     \t " $7
+}
+
+END {
+print "this concludes the listing"
+}
+```
+这里定义了一个叫FS的特殊变量,这是定义分隔符的另一种办法,这样就不需要在命令选项中指定了.
+```shell
+$ gawk -f script.gawk /etc/passwd
+[...]
+```
+
+
+
+
+
+
+
+
+
+
